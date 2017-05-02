@@ -1,4 +1,4 @@
-from dtOmitted import build_tree
+from utils import build_tree
 
 
 class DecisionTree(object):

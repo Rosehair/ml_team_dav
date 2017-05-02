@@ -1,42 +1,50 @@
+"""logistic regression implementation by Vardges Mambreyan"""
 import numpy as np
 from scipy.special import expit
-import math as math
 
 
-def sigmoid(s):
-    return expit(s)
+def sigmoid(value):
+    """sigmoid function"""
+    return expit(value)
 
 
-def normalized_gradient(X, Y, beta):
-
-    grad = sum(-(1 - sigmoid(beta.T.dot(X[i]) * Y[i])) * X[i]*Y[i] for i in range(X.shape[0]))
-    grad = np.array([grad[i] / (X.shape[0]) for i in range(X.shape[1])])
+def normalized_gradient(data, labels, beta):
+    """calculates normalized gradient"""
+    grad = sum(-(1 - sigmoid(beta.T.dot(data[i]) * labels[i])) * data[i] * labels[i]
+               for i in range(data.shape[0]))
+    grad = np.array([grad[i] / (data.shape[0]) for i in range(data.shape[1])])
     return grad
 
 
-def gradient_descent(X, Y, epsilon=1e-6, l=1, step_size=0.0001, max_steps=1000):
+def gradient_descent(data, labels, l_reg=1, step_size=0.0001, max_steps=1000):
+    """
+    gradient descent with step size,
+    it will end when looping max_steps times
+    """
 
-    for s in range(Y.shape[0]):
-        if Y[s] == 0: Y[s] = -1
+    for step in range(labels.shape[0]):
+        if labels[step] == 0:
+            labels[step] = -1
+    beta = np.zeros(data.shape[1])
 
-    beta = np.zeros(X.shape[1])
+    for _ in range(max_steps):
+        grad = normalized_gradient(data, labels, beta)
 
-    for s in range(max_steps):
-        grad = normalized_gradient(X, Y, beta)
-
-        beta1 = beta[1:] - step_size*(grad[1:] + l * np.array(beta[1:]))
+        beta1 = beta[1:] - step_size*(grad[1:] + l_reg * np.array(beta[1:]))
         beta0 = beta[0] - step_size*(grad[0])
         beta = np.concatenate((np.array([beta0]), beta1))
 
     return beta
 
 
-def gradient_predict(X, beta):
-    Y =[]
-    for s in range(X.shape[0]):
-        if beta.dot(X[s]) > 0: Y.append(1)
-        else: Y.append(-1)
-    return np.array(Y)
+def gradient_predict(data, beta):
+    """predicts labels for the data"""
+    labels = []
+    for step in range(data.shape[0]):
+        if beta.dot(data[step]) > 0:
+            labels.append(1)
+        else: labels.append(-1)
+    return np.array(labels)
 
 
 
