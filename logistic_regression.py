@@ -1,85 +1,63 @@
 import numpy as np
-import math as math
 
 
-def sigmoid(s):
-    return 1 / (1 + np.exp(-s))
+class LogisticRegression(object):
+    def __init__(self):
+        self.beta = None
 
+    @staticmethod
+    def sigmoid(s):
+        return 1 / (1 + np.exp(np.negative(s)))
 
-def normalized_gradient(X, Y, beta):
+    @staticmethod
+    def sigmoid_array(s):
+        sig = np.zeros(s.shape)
+        sig[s >= 0] = 1 / (1 + np.exp(-s[s >= 0]))
+        sig[s < 0] = np.exp(s[s < 0]) / (1 + np.exp(s[s < 0]))
+        return sig
 
-    x_mean = np.array([np.mean(X.T[i]) for i in range(X.shape[1])])
+    @staticmethod
+    def normalized_gradient(X, y, beta, l):
+        y = np.array(y)
+        gradient = np.zeros(len(beta))
+        gradient = (X.T.dot(-1 * y * LogisticRegression.sigmoid_array(-1 * y * (X.dot(beta)))) + l * beta) / len(X)
+        return gradient
 
-    grad = sum(-(1 - sigmoid(beta.T.dot(X[i]) * Y[i])) * X[i]*Y[i] for i in range(X.shape[0]))
+    @staticmethod
+    def gradient_descent(X, y, beta_start, l=1, step_size=0.001,
+                         max_epoch=100, batch_size=100):
+        y = np.array(y)
+        beta_norm = np.zeros(X.shape[1])
+        a = np.mean(X[:, 1:], axis=0)
+        m = np.max(np.abs(X[:, 1:] - a), axis=0) / 2 + 1
+        b = np.std(X[:, 1:], axis=0)
+        b[b < m] = m[b < m]
+        beta_norm[1:] = beta_start[1:] * b
+        beta_norm[0] = beta_start[0] + a.dot(beta_start[1:])
+        X_norm = np.column_stack((X[:, 0], (X[:, 1:] - a) / b))
+        y_norm = y
+        l_norm = np.hstack((0, l / (b ** 2)))
+        for epoch in range(max_epoch):
+            perm = np.random.permutation(len(X_norm))
+            X_norm = X_norm[perm]
+            y_norm = y_norm[perm]
+            for start in range(0, len(X), batch_size):
+                end = start + batch_size
+                X_batch = X_norm[start:end]
+                y_batch = y_norm[start:end]
+                grad = LogisticRegression.normalized_gradient(X_batch, y_batch, beta_norm, l_norm)
+                delta = step_size * grad
+                beta_norm = beta_norm - delta
 
-    grad = np.array([grad[i] / (X.shape[0] * x_mean[i]) for i in range(x_mean.shape[0])])
+        beta = np.hstack(((beta_norm[0] - a.dot(beta_norm[1:] / b)), beta_norm[1:] / b))
+        return beta
 
-    # print(grad)
+    def predict(self, X):
+        X = np.column_stack((np.ones(len(X)),X))
+        return np.array([1 if a > 0.5 else 0 for a in LogisticRegression.sigmoid_array(X.dot(self.beta))])
 
-    return grad
-
-
-def gradient_descent(X, Y, epsilon=1e-6, l=1, step_size=1e-4, max_steps=1000):
-
-    beta = np.zeros(X.shape[1])
-
-    beta_last = beta
-
-    for s in range(max_steps):
-
-        grad = normalized_gradient(X, Y, beta)
-
-        if s !=0:
-
-            beta_last = beta
-
-
-
-        # beta = beta - step_size * grad
-
-        beta1 = beta[1:] - step_size*(grad[1:] + l * np.array(beta[1:]))
-
-        beta0 = beta[0] - step_size*(grad[0])
-
-        beta = np.concatenate((np.array([beta0]), beta1))
-
-
-
-        # print(math.fabs(np.linalg.norm(beta_last - beta)/np.linalg.norm(beta)))
-        # print(np.linalg.norm(beta_last))
-        if math.fabs(np.linalg.norm(beta_last - beta)/np.linalg.norm(beta)) < epsilon:
-
-            # print(s)
-
-            break
-
-    return beta
-
-
-
-# def gradient_descent(X, Y, epsilon=1e-6, l=1, step_size=1e-4, max_steps=1000):
-#     """
-#     Implement gradient descent using full value of the gradient.
-#     :param X: data matrix (2 dimensional np.array)
-#     :param Y: response variables (1 dimensional np.array)
-#     :param l: regularization parameter lambda
-#     :param epsilon: approximation strength
-#     :param max_steps: maximum number of iterations before algorithm will
-#         terminate.
-#     :return: value of beta (1 dimensional np.array)
-#     """
-#     Y = np.reshape(Y, (1, np.size(Y))).flatten()
-#     beta = np.zeros(X.shape[1])
-#     for s in range(max_steps):
-#         if s % 1000 == 0:
-#             print(s, beta)
-#
-#         print(np.shape(X))
-#         print(np.shape(beta))
-#         print(np.shape(X * beta))
-#         print(np.shape(Y))
-#         print(np.shape(sigmoid(Y.dot(X * beta))))
-#
-#         beta = X.T * Y.dot(sigmoid(Y.dot(X * beta)))
-#         print(beta)
-#     return beta
+    def train(self, X, y, l=1, step_size=0.001, max_epoch=20):
+        X = np.column_stack((np.ones(len(X)),X))
+        self.beta = np.zeros(X.shape[1])
+        self.beta = LogisticRegression.gradient_descent(X, y, self.beta, l, step_size=step_size, max_epoch=max_epoch,
+                                                        batch_size=5)
