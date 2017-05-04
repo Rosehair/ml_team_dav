@@ -83,10 +83,6 @@ def build_tree(data, current_depth=0, max_depth=1e10):
     features = np.array(features)
     for index, feature in enumerate(features):
         feature = np.unique(feature)
-        minimum = np.amin(feature)
-        maximum = np.amax(feature)
-        dif = maximum - minimum
-        feature = np.array([minimum + 5, minimum + dif, maximum - dif, maximum - 5])
         for value in feature:
             data1, data2 = divide_data(data, index, value)
             gini = gini_impurity(data1, data2)

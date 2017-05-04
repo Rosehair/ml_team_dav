@@ -1,4 +1,4 @@
-"""logistic regression implementation by Vardges Mambreyan"""
+"""gradient descent implementation by Vardges Mambreyan"""
 import numpy as np
 from scipy.special import expit
 

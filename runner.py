@@ -7,7 +7,7 @@ import math as math
 import numpy as np
 from decision_tree import DecisionTree
 from random_forest import RandomForest
-from logistic_regression import gradient_descent, gradient_predict
+from gradient_descent import gradient_descent, gradient_predict
 
 
 def accuracy_score(y_true, y_predict):
@@ -22,8 +22,11 @@ def accuracy_score(y_true, y_predict):
 
 
 def evaluate_performance():
-    """reads the data and then call each of the method for learning"""
-    filename = 'SPECTF.dat'
+    """
+    reads the data and then call each of the method for learning
+    will perform evaluation 20 times and will take mean values of them
+    """
+    filename = './data/SPECTF.dat'
     data = np.loadtxt(filename, delimiter=',')
     data = np.array(data)
 
@@ -58,13 +61,13 @@ def evaluate_performance():
         # output predictions on the remaining data
         y_pred = classifier.predict(xtest)
 
-        # train the decision tree
+        # train the Random forest
         classifier_forest = RandomForest(20, 4, 0.4)
         classifier_forest.fit(train)
         # output predictions on the remaining data
         y_pred_forest = classifier_forest.predict(xtest)
 
-        # train the decision tree
+        # train the gradient decent
         ones = np.array(np.ones(x_log.shape[0]).reshape(x_log.shape[0], 1))
         x_log = np.concatenate((ones, x_log), axis=1)
         beta = gradient_descent(x_log, y_log)
