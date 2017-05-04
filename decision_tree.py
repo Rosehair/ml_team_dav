@@ -12,11 +12,14 @@ class DecisionTree(object):
         self.tree = None
 
     class Condition:
-        def __init__(self, feature=None, value=None):
+        def __init__(self,checker=None, feature=None, value=None):
             self.feature = feature
             self.value = value
+            self.check = checker
+            if self.check is None:
+                self.check = self.check_default
 
-        def check(self, x):
+        def check_default(self, x):
             return x[self.feature] > self.value
 
     class Node:
@@ -116,7 +119,13 @@ class DecisionTree(object):
             candidates = (candidates[1:] + candidates[0:-1]) / 2
             # np.random.shuffle(candidates)
             for candidate in candidates:
-                condition = DecisionTree.Condition(feature, candidate)
+
+                def make_checker(feature, value):
+                    def checker(x):
+                        return x[feature] >= value
+                    return checker
+
+                condition = DecisionTree.Condition(make_checker(feature, candidate), feature, candidate)
                 update_best(condition)
         if best_split is None:
             return DecisionTree.Node(is_leaf=True, label=DecisionTree.get_label(y),
