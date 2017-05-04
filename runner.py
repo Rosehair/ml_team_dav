@@ -22,7 +22,7 @@ def plot_data(X, y, name=""):
     plt.savefig("pic" + name + ".png")
 
 
-def evaluate_performance():
+def evaluate_performance(X, y, train_data_size, trials=10):
     """
     Evaluate the performance of decision trees and logistic regression,
     average over 1,000 trials of 10-fold cross validation
@@ -36,13 +36,6 @@ def evaluate_performance():
 
     ** Note that your implementation must follow this API**
     """
-
-    # Load Data
-    filename = 'data/SPECTF.dat'
-    data = np.loadtxt(filename, delimiter=',')
-    X = data[:, 1:]
-    y = np.array(data[:, 0])
-
     n, d = X.shape
     print(X.shape, y.shape, n, d)
 
@@ -53,16 +46,16 @@ def evaluate_performance():
         "logistic regression":[],
         "random forest":[],
     }
-    for trial in range(20):
+    for trial in range(trials):
         print("TRIAL: " + str(trial))
         perm = np.random.permutation(len(y))
         X = X[perm]
         y = y[perm]
 
-        X_train = X[0:100, :]  # train on first 100 instances
-        X_test = X[100:, :]
-        y_train = y[0:100]  # test on remaining instances
-        y_test = y[100:]
+        X_train = X[0:train_data_size, :]  # train on first 100 instances
+        X_test = X[train_data_size:, :]
+        y_train = y[0:train_data_size]  # test on remaining instances
+        y_test = y[train_data_size:]
 
         classifier = DecisionTree(100)
         classifier.fit(X_train, y_train)
@@ -102,11 +95,11 @@ def evaluate_performance():
     return stats
 
 
-# Do not modify from HERE...
 if __name__ == "__main__":
-    stats = evaluate_performance()
+    # Load Data
+    filename = 'data/SPECTF.dat'
+    data = np.loadtxt(filename, delimiter=',')
+    stats = evaluate_performance(data[:, 1:], data[:, 0], train_data_size=102, trials=20)
     print("Decision Tree Accuracy = ", stats[0, 0], " (", stats[0, 1], ")")
     print("Random Forest Accuracy = ", stats[1, 0], " (", stats[1, 1], ")")
-    # stats = evaluate_performance()
     print( "Logistic Reg. Accuracy = ", stats[2, 0], " (", stats[2, 1], ")")
-# ...to HERE.
