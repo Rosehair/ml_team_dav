@@ -1,5 +1,4 @@
 """implementation for random forest by by Vardges Mambreyan"""
-import math as math
 from collections import Counter
 from decision_tree import DecisionTree
 import numpy as np
@@ -25,7 +24,7 @@ class RandomForest(object):
         :return: nothing
         """
         trees = []
-        sample_size = math.floor(self.ratio * len(x_train))
+        sample_size = np.int(self.ratio * len(x_train))
         for step in range(self.num_trees):
             number = x_train.shape[0]
             idx = np.arange(number)
