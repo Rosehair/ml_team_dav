@@ -35,7 +35,7 @@ class RandomForest(object):
             x_train = x_train[:sample_size, :]
             x_train = np.array(x_train)
             y_train = y_train[idx]
-            y_train = y_train[:sample_size, :]
+            y_train = y_train[:sample_size]
             y_train = np.array(y_train)
             tree = DecisionTree(self.max_tree_depth)
 
