@@ -58,6 +58,8 @@ class LogisticRegression(object):
 
     def train(self, X, y, l=1, step_size=0.001, max_epoch=20):
         X = np.column_stack((np.ones(len(X)),X))
+        y[y == 0] = -1
         self.beta = np.zeros(X.shape[1])
         self.beta = LogisticRegression.gradient_descent(X, y, self.beta, l, step_size=step_size, max_epoch=max_epoch,
                                                         batch_size=5)
+        y[y == -1] = 0
