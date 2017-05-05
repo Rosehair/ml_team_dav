@@ -63,11 +63,11 @@ def evaluate_performance(X, y, train_data_size, trials=10):
         all_accuracies["decision tree"].append(accuracy_score(y_test, y_predicted))
 
         classifier = LogisticRegression()
-        classifier.train(X_train, y_train)
+        classifier.train(X_train, y_train, l=0, step_size=0.001, max_epoch=1000)
         y_predicted = classifier.predict(X_test)
         all_accuracies["logistic regression"].append(accuracy_score(y_test, y_predicted))
 
-        classifier = RandomForest(10,10,0.4)
+        classifier = RandomForest(10, 10, 0.4)
         classifier.fit(X_train, y_train)
         y_predicted, conf = classifier.predict(X_test)
         all_accuracies["random forest"].append(accuracy_score(y_test, y_predicted))
@@ -99,7 +99,8 @@ if __name__ == "__main__":
     # Load Data
     filename = 'data/SPECTF.dat'
     data = np.loadtxt(filename, delimiter=',')
-    stats = evaluate_performance(data[:, 1:], data[:, 0], train_data_size=102, trials=20)
+    print(len(data[data[:, 0] == 1]) / len(data))
+    stats = evaluate_performance(data[:, 1:], data[:, 0], train_data_size=102, trials=5)
     print("Decision Tree Accuracy = ", stats[0, 0], " (", stats[0, 1], ")")
     print("Random Forest Accuracy = ", stats[1, 0], " (", stats[1, 1], ")")
     print( "Logistic Reg. Accuracy = ", stats[2, 0], " (", stats[2, 1], ")")

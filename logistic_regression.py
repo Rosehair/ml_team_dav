@@ -5,26 +5,30 @@ class LogisticRegression(object):
     def __init__(self):
         self.beta = None
 
+    """
+    Implement gradient descent using full value of the gradient.
+    :param X: data matrix (2 dimensional np.array)
+    :param Y: response variables (1 dimensional np.array)
+    :param l: regularization parameter lambda
+    :param epsilon: approximation strength
+    :param max_steps: maximum number of iterations before algorithm will
+        terminate.
+    :return: value of beta (1 dimensional np.array)
+    """
+
     @staticmethod
     def sigmoid(s):
         return 1 / (1 + np.exp(np.negative(s)))
 
     @staticmethod
-    def sigmoid_array(s):
-        sig = np.zeros(s.shape)
-        sig[s >= 0] = 1 / (1 + np.exp(-s[s >= 0]))
-        sig[s < 0] = np.exp(s[s < 0]) / (1 + np.exp(s[s < 0]))
-        return sig
-
-    @staticmethod
     def normalized_gradient(X, y, beta, l):
         y = np.array(y)
-        gradient = np.zeros(len(beta))
-        gradient = (X.T.dot(-1 * y * LogisticRegression.sigmoid_array(-1 * y * (X.dot(beta)))) + l * beta) / len(X)
+        gradient = (X.T.dot(-1 * y * LogisticRegression.sigmoid(-1 * y * (X.dot(beta)))) + l * beta) / len(X)
         return gradient
 
+
     @staticmethod
-    def gradient_descent(X, y, beta_start, l=1, step_size=0.001,
+    def gradient_descent(X, y, beta_start, l=0, step_size=0.001,
                          max_epoch=100, batch_size=100):
         y = np.array(y)
         beta_norm = np.zeros(X.shape[1])
@@ -54,10 +58,15 @@ class LogisticRegression(object):
 
     def predict(self, X):
         X = np.column_stack((np.ones(len(X)),X))
-        return np.array([1 if a > 0.5 else 0 for a in LogisticRegression.sigmoid_array(X.dot(self.beta))])
+        pr = LogisticRegression.sigmoid(X.dot(self.beta))
+        pr[pr > 0.5] = 1
+        pr[pr < 0.5] = 0
+        return pr
 
     def train(self, X, y, l=1, step_size=0.001, max_epoch=20):
-        X = np.column_stack((np.ones(len(X)),X))
+        X = np.column_stack((np.ones(len(X)), X))
+        y = y.copy()
+        y[y == 0] = -1
         self.beta = np.zeros(X.shape[1])
         self.beta = LogisticRegression.gradient_descent(X, y, self.beta, l, step_size=step_size, max_epoch=max_epoch,
                                                         batch_size=5)

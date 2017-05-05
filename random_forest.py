@@ -38,7 +38,6 @@ class RandomForest(object):
         confidences for each of the labels.
         """
         ys = np.array([tree.predict(X) for tree in self.trees])
-
         trees = self.num_trees*1.
 
         y_mean = ys.mean(axis=0)
