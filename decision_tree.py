@@ -154,7 +154,7 @@ class DecisionTree(object):
         :param train_data: 2 dimensional python list or numpy 2 dimensional array
         :param train_labels: 1 dimensional python list or numpy 1 dimensional array
         """
-
+        train_labels = np.reshape(train_labels, (np.size(train_labels), 1))
         data = np.concatenate((train_data, train_labels), axis=1)
         self.tree = build_tree(data, max_depth=self.max_depth)
 
