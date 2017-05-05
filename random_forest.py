@@ -18,20 +18,28 @@ class RandomForest(object):
         self.ratio = ratio_per_tree
         self.trees = None
 
-    def fit(self, data):
-        """"fits the data to the forest"""
+    def fit(self, x_train, y_train):
+        """
+        :param x_train: features of the data 
+        :param y_train: labels of the data
+        :return: nothing
+        """
         trees = []
-        sample_size = math.floor(self.ratio * len(data))
+        sample_size = math.floor(self.ratio * len(x_train))
         for step in range(self.num_trees):
-            number = data.shape[0]
+            number = x_train.shape[0]
             idx = np.arange(number)
             np.random.seed(step)
             np.random.shuffle(idx)
-            data = data[idx]
-            data = data[:sample_size, :]
-            data = np.array(data)
+            x_train = x_train[idx]
+            x_train = x_train[:sample_size, :]
+            x_train = np.array(x_train)
+            y_train = y_train[idx]
+            y_train = y_train[:sample_size, :]
+            y_train = np.array(y_train)
             tree = DecisionTree(self.max_tree_depth)
-            tree.fit(data)
+
+            tree.fit(x_train, y_train)
             trees.append(tree)
         self.trees = trees
 
@@ -39,6 +47,8 @@ class RandomForest(object):
         """
         predicts the labels for the data provided, 
         it requires for method fit to be called previously
+        data: features to predict on
+        returns: predicted labels
         """
 
         labels = []
@@ -63,4 +73,4 @@ class RandomForest(object):
             count = Counter(prediction)
             labels.append(count.most_common(1)[0][0])
 
-        return labels
+        return np.array(labels)
