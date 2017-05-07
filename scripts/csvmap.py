@@ -100,7 +100,7 @@ def parse_args():
     parser.add_argument('file', nargs='?', help='File to read input from. stdin is used by default')
     parser.add_argument('expression', nargs='?', type=str, default='',
                         help="Python expression to be used to transform a row. Specific "
-                             "columns can be referred as a fields of row object named r")
+                             "columns can be referred as a fields of of dictionary named r")
 
     args = parser.parse_args()
     return args
