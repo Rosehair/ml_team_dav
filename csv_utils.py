@@ -1,38 +1,39 @@
-"""
-Module is to read csv files
-"""
-import numpy as np
+"""read_csv implemented by Vardges"""
+from pandas import DataFrame
+import pandas as pd
 
-def read_csv(path, delimiter=','):
-    """
-    :param path: the path of the csv file
-    :param delimiter: the delimiter
-    :return: the object data the csv stored to
-    """
-    with open(path, 'r') as csv:
-        read_data = csv.read().split('\n')
-    header = read_data[0].split(delimiter)
-    data = read_data[1: ]
-    body = []
-    for row in data:
-        if len(row) is 0:
-            break
-        else:
-            body.append([float(x) if '.' in x else int(x) for x in row.split(delimiter)])
-    body = np.array(body).T
-    print header
-    res = {}
-    for ind, name in enumerate(header):
-        res[name] = body[ind, :]
-    return res
 
-def test(dataframe, res):
+def read_csv(filename):
     """
-    :param dataframe: dataframe to compare with
-    :param res: our function's output object
-    :return: True if the data is same
+    :param filename: file path to read
+    :return: dataframe created form file
     """
-    for col in dataframe.columns:
-        if not np.array_equal(dataframe[col].values, res[col]):
-            return False
-    return True
+    with open(filename, 'r') as line:
+        content = line.readlines()
+    content = [x.strip() for x in content]
+
+    labels = content[0].split(',')
+    rows = []
+    for index in range(1, len(content)):
+        my_dict = {}
+        features = (content[index].split(','))
+        for step, feature in enumerate(features):
+            my_dict.update({labels[step]: int(feature)})
+        rows.append(my_dict)
+    return DataFrame(rows)
+
+
+def test(file):
+    """
+    :param file: path to file to read 
+    :return: nothing
+    tests if read_csv returned dataframe with the same number of axes and dimensions
+    """
+    df = read_csv(file)
+    df_pandas = pd.read_csv(file)
+    if len(df.axes) != len(df_pandas.axes) or df.ndim != df_pandas.ndim:
+        print("error!")
+    else:
+        print("test passed")
+
+test('SPECTF.dat')
