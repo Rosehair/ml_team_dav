@@ -26,7 +26,7 @@ def print_row(row, output_stream):
 
 def find_features(string_f, labels, unique=False):
     """
-    :param complement: if true, return indexes not in string_f
+    finds features in labels
     :param unique: to take only unique fields
     :param string_f: feature string 
     :param labels: first row of the data
@@ -49,6 +49,7 @@ def find_features(string_f, labels, unique=False):
 
 def filter_by_column(row, indexes):
     """
+    filters rows to only pass rows that are specified in fields
     :param row: original rows of file 
     :param indexes: indexes to only show in the end
     :return: new row
@@ -70,8 +71,11 @@ def main():
     index_show = find_features(args.fields, first_row, unique=args.unique)
     print_row(filter_by_column(first_row, index_show), output_stream)
 
-    for _ in input_stream:
-        row = input_stream.readline().strip().split(args.separator)
+    while True:
+        row = input_stream.readline()
+        if len(row) is 0:
+            break
+        row = row.strip().split(args.separator)
         row = filter_by_column(row, index_show)
         print_row(row, output_stream)
 
@@ -87,8 +91,6 @@ def parse_args():
     parser.add_argument('-f', '--fields', type=str, help='Specify list of fields (comma separated) to cut', default='')
     parser.add_argument('-o', '--output_file', type=str, help='Output file. stdout is used by default')
     parser.add_argument('-u', '--unique', help='Remove duplicates from list of FIELDS', action='store_true')
-    # parser.add_argument('-c', '--complement', help='Instead of leaving only specified columns, leave all except '
-    #                                                'specified', action='store_true')
     parser.add_argument('file', nargs='?', help='File to read input from. stdin is used by default')
 
     args = parser.parse_args()

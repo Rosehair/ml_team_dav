@@ -37,7 +37,7 @@ def print_separetor(column_widths, output_stream):
 def main():
     args = parse_args()
     input_stream = open(args.file, 'r') if args.file else sys.stdin
-    output_stream = open(args.output_file, 'r') if args.output_file else sys.stdout
+    output_stream = open(args.output_file, 'w') if args.output_file else sys.stdout
 
     columns = input_stream.readline().strip().split(args.separator)
     first_rows = [columns]
@@ -49,7 +49,7 @@ def main():
 
     column_widths = [max([len(column) for column in [row[i] for row in first_rows]]) for i in range(len(columns))]
 
-    num_lines = args.lines_number
+    num_lines = args.lines_number + 1
     for index, row in enumerate(first_rows):
         if num_lines == 0:
             break
@@ -58,8 +58,9 @@ def main():
             print_separetor(column_widths, output_stream)
         print_row(row, column_widths, output_stream)
 
-    for row in input_stream:
-        if num_lines == 0:
+    while True:
+        row = input_stream.readline()
+        if num_lines == 0 or len(row) is 0:
             break
         num_lines -= 1
         print_row(row.strip().split(args.separator), column_widths, output_stream)
