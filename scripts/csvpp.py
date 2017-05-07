@@ -1,3 +1,4 @@
+#!/home/david/miniconda3/bin/python3
 from argparse import ArgumentParser
 import sys
 
