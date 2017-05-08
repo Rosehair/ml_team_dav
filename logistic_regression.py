@@ -56,7 +56,7 @@ class LogisticRegression(object):
         X = np.column_stack((np.ones(len(X)),X))
         return np.array([1 if a > 0.5 else 0 for a in LogisticRegression.sigmoid_array(X.dot(self.beta))])
 
-    def train(self, X, y, l=1, step_size=0.001, max_epoch=20):
+    def fit(self, X, y, l=1, step_size=0.001, max_epoch=20):
         X = np.column_stack((np.ones(len(X)),X))
         self.beta = np.zeros(X.shape[1])
         self.beta = LogisticRegression.gradient_descent(X, y, self.beta, l, step_size=step_size, max_epoch=max_epoch,
