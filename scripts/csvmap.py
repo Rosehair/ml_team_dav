@@ -1,14 +1,15 @@
 from argparse import ArgumentParser
 from collections import defaultdict
-from signal import signal, SIGPIPE, SIG_DFL
 import sys
 
 DESCRIPTION = 'csvmap - Transform each row of a csv file with an expression provided.'
 EXAMPLES = "example: cat file.csv | csvmap 'r[5] = float(r[12]) ** 2'"
 
 
-def pr_string(str):
+def format_string(str):
     """
+    formats string to expression to be more easy to type
+    for example r[a] = r[b] instead of r["a"] = r["b"]
     :param str: string to process 
     :return: string in which there is " after [ and before ]
     """
@@ -64,19 +65,15 @@ def map_line(row, labels, expression, EXEC):
 
 
 def main():
-    signal(SIGPIPE, SIG_DFL)
     args = parse_args()
-    expression = pr_string(args.expression)
+    expression = format_string(args.expression)
 
     input_stream = open(args.file, 'r') if args.file else sys.stdin
     output_stream = open(args.output_file, 'r') if args.output_file else sys.stdout
 
     first_row = input_stream.readline().strip().split(args.separator)
     key_printed = False
-    while True:
-        row = input_stream.readline()
-        if len(row) is 0:
-            break
+    for row in input_stream:
         row = row.strip().split(args.separator)
         new_row, keys = map_line(row, first_row, expression, args.EXEC)
         if not key_printed:

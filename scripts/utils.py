@@ -1,6 +1,5 @@
 def find_features(string_f, labels, unique=False):
     """
-    :param complement: if true, return indexes not in string_f
     :param unique: to take only unique fields
     :param string_f: feature string
     :param labels: first row of the data

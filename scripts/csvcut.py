@@ -1,9 +1,7 @@
-#!/home/david/miniconda3/bin/python3
 from argparse import ArgumentParser
-from signal import signal, SIGPIPE, SIG_DFL
-import numpy as np
-import sys
 from utils import *
+import sys
+
 
 DESCRIPTION = 'csvcut - Select some columns from csv streem. Could change order of fields.'
 EXAMPLES = 'example: csvcut -f 1,2 stat.txt'
@@ -26,7 +24,6 @@ def print_row(row, output_stream):
 
 
 def main():
-    signal(SIGPIPE, SIG_DFL)
     args = parse_args()
 
     input_stream = open(args.file, 'r') if args.file else sys.stdin
@@ -36,10 +33,7 @@ def main():
     index_show = find_features(args.fields, first_row, unique=args.unique)
     print_row(filter_by_column(first_row, index_show), output_stream)
 
-    while True:
-        row = input_stream.readline()
-        if len(row) is 0:
-            break
+    for row in input_stream:
         row = row.strip().split(args.separator)
         row = filter_by_column(row, index_show)
         print_row(row, output_stream)

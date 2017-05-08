@@ -1,4 +1,3 @@
-#!/home/david/miniconda3/bin/python3
 from argparse import ArgumentParser
 import sys
 
@@ -59,9 +58,8 @@ def main():
             print_separetor(column_widths, output_stream)
         print_row(row, column_widths, output_stream)
 
-    while True:
-        row = input_stream.readline()
-        if num_lines == 0 or len(row) is 0:
+    for row in input_stream:
+        if num_lines == 0:
             break
         num_lines -= 1
         print_row(row.strip().split(args.separator), column_widths, output_stream)
