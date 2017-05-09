@@ -50,7 +50,7 @@ print(layer.input_shape, '->',layer.output_shape)
 layer = DropoutLayer(layer, p=0.7)
 print(layer.input_shape, '->',layer.output_shape)
 
-layer = DenseLayer(layer, num_units=300, nonlinearity=lasagne.nonlinearities.elu)
+layer = DenseLayer(layer, num_units=600, nonlinearity=lasagne.nonlinearities.elu)
 print(layer.input_shape, '->',layer.output_shape)
 
 layer = DenseLayer(layer,num_units = 10,nonlinearity=lasagne.nonlinearities.softmax)
@@ -108,7 +108,9 @@ import time
 
 batch_size = 300  # number of samples processed at each function call
 
+
 print('Start Training')
+stdout = open('./stdout.txt', 'w')
 while True:
     loss_history = loss_history[-1000:]
     val_acc_history = val_acc_history[-1000:]
@@ -142,10 +144,15 @@ while True:
 
     print("Epoch {} took {:.3f}s (last saved epoch {})".format(epoch,  time.time() - start_time, last_saved_epoch))
     print("  training loss (in-iteration):\t\t{:.6f}".format(loss))
-    print("  train accuracy:\t\t{:.2f} %".format(train_acc))
-    print("  validation accuracy:\t\t{:.2f} %".format(val_acc))
-
+    print("  train accuracy:\t{:.2f} %".format(train_acc))
+    print("  validation accuracy:\t{:.2f} %".format(val_acc))
+    stdout.write("Epoch {} took {:.3f}s (last saved epoch {}) \n".format(epoch,  time.time() - start_time, last_saved_epoch))
+    stdout.write("  training loss (in-iteration):\t\t{:.6f} \n".format(loss))
+    stdout.write("  train accuracy:\t{:.2f} % \n".format(train_acc))
+    stdout.write("  validation accuracy:\t{:.2f} % \n".format(val_acc))
     if epoch % 5 == 0:
         dump()
         print('Saved!!!')
+        stdout.write('Saved!!!\n')
+    stdout.flush()
 

@@ -35,7 +35,7 @@ layer = Conv2DLayer(layer, num_filters=31, filter_size=(7, 5), pad='same', nonli
 layer = MaxPool2DLayer(layer, (2,2))
 layer = Conv2DLayer(layer, num_filters=16, filter_size=(3, 3), pad='same', nonlinearity=lasagne.nonlinearities.linear)
 layer = DropoutLayer(layer, p=0.7)
-layer = DenseLayer(layer, num_units=300, nonlinearity=lasagne.nonlinearities.elu)
+layer = DenseLayer(layer, num_units=600, nonlinearity=lasagne.nonlinearities.elu)
 layer = DenseLayer(layer,num_units = 10,nonlinearity=lasagne.nonlinearities.softmax)
 
 ##############################################
