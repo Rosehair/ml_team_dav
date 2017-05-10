@@ -5,7 +5,7 @@ import pickle
 
 from mnist import load_dataset
 
-__file_path__ = './params_54216783'
+__file_path__ = './params_54216785'
 
 X_train, y_train, X_val, y_val, X_test, y_test = load_dataset()
 
@@ -30,14 +30,21 @@ import lasagne
 from lasagne.layers import *
 
 layer = InputLayer(shape = input_shape,input_var=input_X)
-layer = MaxPool2DLayer(layer, (2,2))
-layer = Conv2DLayer(layer, num_filters=31, filter_size=(7, 5), pad='same', nonlinearity=lasagne.nonlinearities.linear)
-layer = MaxPool2DLayer(layer, (2,2))
-layer = Conv2DLayer(layer, num_filters=16, filter_size=(3, 3), pad='same', nonlinearity=lasagne.nonlinearities.linear)
-layer = DropoutLayer(layer, p=0.7)
-layer = DenseLayer(layer, num_units=600, nonlinearity=lasagne.nonlinearities.elu)
-layer = DenseLayer(layer,num_units = 10,nonlinearity=lasagne.nonlinearities.softmax)
 
+
+layer = Conv2DLayer(layer, num_filters=20, filter_size=(5, 5), pad='same', nonlinearity=lasagne.nonlinearities.linear)
+
+layer = MaxPool2DLayer(layer, (2,2))
+
+layer = Conv2DLayer(layer, num_filters=10, filter_size=(5, 5), pad='same', nonlinearity=lasagne.nonlinearities.linear)
+
+layer = DropoutLayer(layer, p=0.7)
+layer = DenseLayer(layer, num_units=911, nonlinearity=lasagne.nonlinearities.tanh)
+print(layer.input_shape, '->',layer.output_shape)
+
+layer = DenseLayer(layer,num_units = 10,nonlinearity=lasagne.nonlinearities.softmax)
+print(layer.input_shape, '->',layer.output_shape)
+#
 ##############################################
 y_test_predicted = lasagne.layers.get_output(layer, deterministic=True)
 parameters = lasagne.layers.get_all_params(layer)

@@ -4,8 +4,9 @@ import theano.tensor as T
 import pickle
 
 from mnist import load_dataset
+__code__ = str(54216785)
 
-__file_path__ = './params_54216783'
+__file_path__ = './params_' + __code__
 
 X_train,y_train,X_val,y_val,X_test,y_test = load_dataset()
 
@@ -35,22 +36,15 @@ from lasagne.layers import *
 
 layer = InputLayer(shape = input_shape,input_var=input_X)
 
-layer = MaxPool2DLayer(layer, (2,2))
-print(layer.input_shape, '->',layer.output_shape)
 
-layer = Conv2DLayer(layer, num_filters=31, filter_size=(7, 5), pad='same', nonlinearity=lasagne.nonlinearities.linear)
-print(layer.input_shape, '->',layer.output_shape)
+layer = Conv2DLayer(layer, num_filters=20, filter_size=(5, 5), pad='same', nonlinearity=lasagne.nonlinearities.linear)
 
 layer = MaxPool2DLayer(layer, (2,2))
-print(layer.input_shape, '->',layer.output_shape)
 
-layer = Conv2DLayer(layer, num_filters=16, filter_size=(3, 3), pad='same', nonlinearity=lasagne.nonlinearities.linear)
-print(layer.input_shape, '->',layer.output_shape)
+layer = Conv2DLayer(layer, num_filters=10, filter_size=(5, 5), pad='same', nonlinearity=lasagne.nonlinearities.linear)
 
 layer = DropoutLayer(layer, p=0.7)
-print(layer.input_shape, '->',layer.output_shape)
-
-layer = DenseLayer(layer, num_units=600, nonlinearity=lasagne.nonlinearities.elu)
+layer = DenseLayer(layer, num_units=911, nonlinearity=lasagne.nonlinearities.tanh)
 print(layer.input_shape, '->',layer.output_shape)
 
 layer = DenseLayer(layer,num_units = 10,nonlinearity=lasagne.nonlinearities.softmax)
@@ -61,7 +55,7 @@ y_test_predicted = lasagne.layers.get_output(layer, deterministic=True)
 parameters = lasagne.layers.get_all_params(layer)
 loss = lasagne.objectives.categorical_crossentropy(y_predicted,target_y).mean()
 accuracy = lasagne.objectives.categorical_accuracy(y_test_predicted,target_y).mean()
-updates_sgd = lasagne.updates.adadelta(loss, parameters, learning_rate=0.5,rho=0.8)
+updates_sgd = lasagne.updates.adadelta(loss, parameters, learning_rate=0.09,rho=0.9)
 train_fun = theano.function([input_X,target_y],[loss,accuracy],updates= updates_sgd)
 accuracy_fun = theano.function([input_X,target_y],accuracy)
 
@@ -106,11 +100,11 @@ if Path(__file_path__).is_file():
 
 import time
 
-batch_size = 300  # number of samples processed at each function call
+batch_size = 50  # number of samples processed at each function call
 
 
 print('Start Training')
-stdout = open('./stdout.txt', 'w')
+stdout = open('./stdout_' + __code__ + '.txt', 'w')
 while True:
     loss_history = loss_history[-1000:]
     val_acc_history = val_acc_history[-1000:]
@@ -143,14 +137,14 @@ while True:
     val_acc_history.append(val_acc)
 
     print("Epoch {} took {:.3f}s (last saved epoch {})".format(epoch,  time.time() - start_time, last_saved_epoch))
-    print("  training loss (in-iteration):\t\t{:.6f}".format(loss))
+    print("  training loss:\t\t{:.6f}".format(loss))
     print("  train accuracy:\t{:.2f} %".format(train_acc))
     print("  validation accuracy:\t{:.2f} %".format(val_acc))
     stdout.write("Epoch {} took {:.3f}s (last saved epoch {}) \n".format(epoch,  time.time() - start_time, last_saved_epoch))
-    stdout.write("  training loss (in-iteration):\t\t{:.6f} \n".format(loss))
+    stdout.write("  training loss:\t\t{:.6f} \n".format(loss))
     stdout.write("  train accuracy:\t{:.2f} % \n".format(train_acc))
     stdout.write("  validation accuracy:\t{:.2f} % \n".format(val_acc))
-    if epoch % 5 == 0:
+    if epoch % 20 == 0:
         dump()
         print('Saved!!!')
         stdout.write('Saved!!!\n')
