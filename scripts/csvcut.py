@@ -1,6 +1,8 @@
 from argparse import ArgumentParser
 from utils import *
 import sys
+from signal import signal, SIGPIPE, SIG_DFL
+signal(SIGPIPE,SIG_DFL)
 
 
 DESCRIPTION = 'csvcut - Select some columns from csv streem. Could change order of fields.'

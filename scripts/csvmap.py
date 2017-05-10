@@ -1,6 +1,8 @@
 from argparse import ArgumentParser
 from collections import defaultdict
 import sys
+from signal import signal, SIGPIPE, SIG_DFL
+signal(SIGPIPE,SIG_DFL)
 
 DESCRIPTION = 'csvmap - Transform each row of a csv file with an expression provided.'
 EXAMPLES = "example: cat file.csv | csvmap 'r[5] = float(r[12]) ** 2'"
@@ -66,6 +68,7 @@ def map_line(row, labels, expression, EXEC):
 
 def main():
     args = parse_args()
+    # print(args.expression)
     expression = format_string(args.expression)
 
     input_stream = open(args.file, 'r') if args.file else sys.stdin
@@ -93,11 +96,12 @@ def parse_args():
     parser.add_argument('-o', '--output_file', type=str, help='Output file. stdout is used by default')
     parser.add_argument('-e', '--EXEC', type=str, help='Execute python code before starting the transformation. '
                                                        'Might be useful for import statements or even for python '
-                                                       'functions definition')
-    parser.add_argument('file', nargs='?', help='File to read input from. stdin is used by default')
-    parser.add_argument('expression', nargs='?', type=str, default='',
+                                                       'functions definition', default='')
+    parser.add_argument('expression', type=str, default='',
                         help="Python expression to be used to transform a row. Specific "
                              "columns can be referred as a fields of of dictionary named r")
+    parser.add_argument('file', nargs='?', help='File to read input from. stdin is used by default')
+
 
     args = parser.parse_args()
     return args

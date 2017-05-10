@@ -1,5 +1,7 @@
 from argparse import ArgumentParser
 import sys
+from signal import signal, SIGPIPE, SIG_DFL
+signal(SIGPIPE,SIG_DFL)
 
 
 DESCRIPTION = 'csvpp - prints cvs file in human-readable format'
