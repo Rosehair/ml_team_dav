@@ -4,7 +4,7 @@ import theano.tensor as T
 import pickle
 
 from mnist import load_dataset
-__code__ = str(54216785)
+__code__ = str(54216787)
 
 __file_path__ = './params_' + __code__
 
@@ -12,8 +12,8 @@ X_train,y_train,X_val,y_val,X_test,y_test = load_dataset()
 
 # hot_points = np.std(X_train[:,0,...],axis=0)
 
-H = np.arange(2, 26)
-W = np.arange(5, 23)
+H = np.arange(1, 27)
+W = np.arange(3, 25)
 
 X_test = X_test[..., H, :][..., W]
 X_train = X_train[..., H, :][..., W]
@@ -37,25 +37,29 @@ from lasagne.layers import *
 layer = InputLayer(shape = input_shape,input_var=input_X)
 
 
-layer = Conv2DLayer(layer, num_filters=20, filter_size=(5, 5), pad='same', nonlinearity=lasagne.nonlinearities.linear)
+layer = Conv2DLayer(layer, num_filters=34, filter_size=(5, 5), pad='same', nonlinearity=lasagne.nonlinearities.rectify)
+
 
 layer = MaxPool2DLayer(layer, (2,2))
 
-layer = Conv2DLayer(layer, num_filters=10, filter_size=(5, 5), pad='same', nonlinearity=lasagne.nonlinearities.linear)
+layer = Conv2DLayer(layer, num_filters=31, filter_size=(5, 5), pad='same', nonlinearity=lasagne.nonlinearities.rectify)
 
-layer = DropoutLayer(layer, p=0.7)
-layer = DenseLayer(layer, num_units=911, nonlinearity=lasagne.nonlinearities.tanh)
-print(layer.input_shape, '->',layer.output_shape)
+layer = MaxPool2DLayer(layer, (2,2))
+
+layer = DropoutLayer(layer, p=0.68)
+
+layer = DenseLayer(layer, num_units=911, nonlinearity=lasagne.nonlinearities.rectify)
+
+layer = DropoutLayer(layer, p=0.41)
 
 layer = DenseLayer(layer,num_units = 10,nonlinearity=lasagne.nonlinearities.softmax)
-print(layer.input_shape, '->',layer.output_shape)
 ##############################################
 y_predicted = lasagne.layers.get_output(layer)
 y_test_predicted = lasagne.layers.get_output(layer, deterministic=True)
 parameters = lasagne.layers.get_all_params(layer)
 loss = lasagne.objectives.categorical_crossentropy(y_predicted,target_y).mean()
 accuracy = lasagne.objectives.categorical_accuracy(y_test_predicted,target_y).mean()
-updates_sgd = lasagne.updates.adadelta(loss, parameters, learning_rate=0.09,rho=0.9)
+updates_sgd = lasagne.updates.nesterov_momentum(loss, parameters, learning_rate=0.09,momentum=0.82)
 train_fun = theano.function([input_X,target_y],[loss,accuracy],updates= updates_sgd)
 accuracy_fun = theano.function([input_X,target_y],accuracy)
 
@@ -100,7 +104,8 @@ if Path(__file_path__).is_file():
 
 import time
 
-batch_size = 50  # number of samples processed at each function call
+batch_size = 100  # number of samples processed at each function call
+
 
 
 print('Start Training')
@@ -144,7 +149,7 @@ while True:
     stdout.write("  training loss:\t\t{:.6f} \n".format(loss))
     stdout.write("  train accuracy:\t{:.2f} % \n".format(train_acc))
     stdout.write("  validation accuracy:\t{:.2f} % \n".format(val_acc))
-    if epoch % 20 == 0:
+    if epoch % 3 == 0:
         dump()
         print('Saved!!!')
         stdout.write('Saved!!!\n')

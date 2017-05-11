@@ -5,14 +5,13 @@ import pickle
 
 from mnist import load_dataset
 
-__file_path__ = './params_54216785'
+__file_path__ = './params_54216786'
 
 X_train, y_train, X_val, y_val, X_test, y_test = load_dataset()
 
 # hot_points = np.std(X_train[:,0,...],axis=0)
-
-H = np.arange(2, 26)
-W = np.arange(5, 23)
+H = np.arange(1, 27)
+W = np.arange(3, 25)
 
 X_test = X_test[..., H, :][..., W]
 X_train = X_train[..., H, :][..., W]
@@ -32,19 +31,23 @@ from lasagne.layers import *
 layer = InputLayer(shape = input_shape,input_var=input_X)
 
 
-layer = Conv2DLayer(layer, num_filters=20, filter_size=(5, 5), pad='same', nonlinearity=lasagne.nonlinearities.linear)
+layer = Conv2DLayer(layer, num_filters=34, filter_size=(5, 5), pad='same', nonlinearity=lasagne.nonlinearities.rectify)
+
 
 layer = MaxPool2DLayer(layer, (2,2))
 
-layer = Conv2DLayer(layer, num_filters=10, filter_size=(5, 5), pad='same', nonlinearity=lasagne.nonlinearities.linear)
+layer = Conv2DLayer(layer, num_filters=31, filter_size=(5, 5), pad='same', nonlinearity=lasagne.nonlinearities.rectify)
 
-layer = DropoutLayer(layer, p=0.7)
-layer = DenseLayer(layer, num_units=911, nonlinearity=lasagne.nonlinearities.tanh)
-print(layer.input_shape, '->',layer.output_shape)
+layer = MaxPool2DLayer(layer, (2,2))
+
+layer = DropoutLayer(layer, p=0.5)
+
+layer = DenseLayer(layer, num_units=911, nonlinearity=lasagne.nonlinearities.rectify)
+
+layer = DropoutLayer(layer, p=0.3)
 
 layer = DenseLayer(layer,num_units = 10,nonlinearity=lasagne.nonlinearities.softmax)
-print(layer.input_shape, '->',layer.output_shape)
-#
+
 ##############################################
 y_test_predicted = lasagne.layers.get_output(layer, deterministic=True)
 parameters = lasagne.layers.get_all_params(layer)
@@ -83,4 +86,4 @@ def accuracy(X, y):
 print('Epoch: {}'.format(last_saved_epoch))
 print("Training set accuracy:\t\t{:.2f} %".format(accuracy(X_train, y_train) * 100))
 print("Validation set accuracy:\t{:.2f} %".format(accuracy(X_val, y_val) * 100))
-print("Test set accuracy:\t\t\t{:.2f} %".format(accuracy(X_test, y_test) * 100))
+print("Test set accuracy:\t\t{:.2f} %".format(accuracy(X_test, y_test) * 100))
