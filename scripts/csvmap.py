@@ -1,21 +1,20 @@
 from argparse import ArgumentParser
 from collections import defaultdict
+from utils import report_error, report_wrong_number_of_columns, InputError, report_wrong_expression, report_wrong_exec
 import sys
-from signal import signal, SIGPIPE, SIG_DFL
-signal(SIGPIPE,SIG_DFL)
 
 DESCRIPTION = 'csvmap - Transform each row of a csv file with an expression provided.'
 EXAMPLES = "example: cat file.csv | csvmap 'r[5] = float(r[12]) ** 2'"
 
 
-def format_string(str):
+def format_string(my_str):
     """
     formats string to expression to be more easy to type
     for example r[a] = r[b] instead of r["a"] = r["b"]
-    :param str: string to process 
+    :param my_str: string to process 
     :return: string in which there is " after [ and before ]
     """
-    new_str = str + ''
+    new_str = my_str + ''
     index = 0
     while True:
         if new_str[index] is '[':
@@ -36,12 +35,7 @@ def print_row(row, output_stream):
     :param row: row represented as a list of columns
     :param output_stream: a stream to pretty print the row
     """
-    output_line = ''
-    for index, column in enumerate(row):
-        if index is 0:
-            output_line += column
-        else:
-            output_line += ',' + column
+    output_line = ','.join(row)
     output_line += '\n'
     output_stream.write(output_line)
 
@@ -56,8 +50,17 @@ def map_line(row, labels, expression, EXEC):
     :return: 
     """
     r = defaultdict(None, zip(labels, row))
-    exec(EXEC)
-    exec(expression)
+    try:
+        exec(EXEC)
+    except:
+        report_wrong_exec(EXEC)
+        return False, False
+    try:
+        exec(expression)
+    except:
+        report_wrong_expression(expression)
+        return False, False
+
     new_row = []
     keys = []
     for key, value in r.items():
@@ -68,26 +71,46 @@ def map_line(row, labels, expression, EXEC):
 
 def main():
     args = parse_args()
-    # print(args.expression)
-    expression = format_string(args.expression)
+    input_stream = sys.stdin
+    output_stream = sys.stdout
+    try:
+        if args.file:
+            input_stream = open(args.file, 'r')
+        if args.output_file:
+            output_stream = open(args.output_file, 'w')
 
-    input_stream = open(args.file, 'r') if args.file else sys.stdin
-    output_stream = open(args.output_file, 'r') if args.output_file else sys.stdout
+        expression = format_string(args.expression)
+        first_row = input_stream.readline().strip().split(args.separator)
 
-    first_row = input_stream.readline().strip().split(args.separator)
-    key_printed = False
-    for row in input_stream:
-        row = row.strip().split(args.separator)
-        new_row, keys = map_line(row, first_row, expression, args.EXEC)
-        if not key_printed:
-            print_row(keys, output_stream)
-            key_printed = True
-        print_row(new_row, output_stream)
+        key_printed = False
+        for row in input_stream:
+            row = row.strip().split(args.separator)
+            if len(row) != len(first_row):
+                report_wrong_number_of_columns(row)
+                break
+            new_row, keys = map_line(row, first_row, expression, args.EXEC)
+            if new_row is False:
+                break
+            if not key_printed:
+                print_row(keys, output_stream)
+                key_printed = True
+            print_row(new_row, output_stream)
 
-    if input_stream != sys.stdin:
-        input_stream.close()
-    if output_stream != sys.stdout:
-        output_stream.close()
+    except FileNotFoundError:
+        report_error("File {} doesn't exist".format(args.file))
+    except InputError as e:
+        report_error(e.message + '. Row: ' + str(e.expression))
+    except KeyboardInterrupt:
+        pass
+    except BrokenPipeError:
+        sys.stderr.close()
+    except Exception as e:
+        report_error('Caught unknown exception. Please report to developers: {}'.format(e))
+    finally:
+        if input_stream and input_stream != sys.stdin:
+            input_stream.close()
+        if output_stream:
+            output_stream.close()
 
 
 def parse_args():
@@ -101,7 +124,6 @@ def parse_args():
                         help="Python expression to be used to transform a row. Specific "
                              "columns can be referred as a fields of of dictionary named r")
     parser.add_argument('file', nargs='?', help='File to read input from. stdin is used by default')
-
 
     args = parser.parse_args()
     return args
