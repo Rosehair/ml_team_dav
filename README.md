@@ -28,7 +28,7 @@ optional arguments:
   > Separator to be used
 
   `-n LINES_NUMBER, --lines_number LINES_NUMBER`
-  >  Number of lines used to AHOQ
+  >  Number of lines used to show
 
   `-c COLUMN, --lines_number COLUMN`
   >  Number of lines used to set column width
