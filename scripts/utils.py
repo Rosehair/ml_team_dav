@@ -1,22 +1,21 @@
-def find_features(string_f, labels, unique=False):
+def find_features(string_f, labels, unique=False, complement=False):
     """
+    :param complement: return indexes of elements that are not in fields
     :param unique: to take only unique fields
     :param string_f: feature string
     :param labels: first row of the data
     :return: indexes of feature ti be shown
     """
-
-    if len(string_f) is 0:
+    if len(string_f) == 0:
         features = []
     else:
         features = string_f.split(',')
         if unique:
             features = list(set(features))
-    indexes = []
-    for index, label in enumerate(labels):
-        for feature in features:
-            if label == feature:
-                indexes.append(index)
+    indexes = [labels.index(i) for i in features]
+    if complement:
+        label_indexes = [labels.index(i) for i in labels]
+        indexes = list(set(label_indexes) - set(indexes))
     return indexes
 
 
