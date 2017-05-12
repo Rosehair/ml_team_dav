@@ -1,4 +1,7 @@
 from argparse import ArgumentParser
+import operator
+import csv
+
 import sys
 
 
@@ -43,28 +46,44 @@ examples: cat stat.csv | csvsort -k shows
 '''
 import pandas as pd
 
+
 def main():
     args = parse_args()
     input_stream = open(args.file, 'r') if args.file else sys.stdin
     output_stream = open(args.output_file, 'w') if args.output_file else sys.stdout
+    args.keys = args.keys.replace('-', args.separator + '-' + args.separator)
+    keys = args.keys.strip().split(args.separator)
 
-    df = pd.read_csv(input_stream, sep=',')
-    if all(map(lambda x: x.isdigit(), args.keys.strip().split(args.separator))):
-        args.keys = df.columns[[int(key) for key in args.keys.strip().split(args.separator)]]
+    headline_str = input_stream.readline()
+    headline = headline_str.strip().split(args.separator)
+    headline = {k: i for i, k in enumerate(headline)}
+    if all(map(lambda x: x.isdigit() or x == '-', keys)):
+        keys = [int(key) for key in keys]
+        pass
     else:
-        args.keys = args.keys.strip().split(args.separator)
+        keys = [headline[key] for key in keys]
+    L = []
+    for line in input_stream:
+        line = line.strip().split(args.separator)
+        if args.numeric:
+            for key in keys:
+                line[key] = int(line[key])
+        L.append(line)
 
-    print(args.keys)
-    df.sort(columns=args.keys, ascending=not args.descending, inplace=True)
-    # print(df)
-    output_stream.write(df.to_csv())
+    print(operator.itemgetter(*keys)(L[1]))
+
+    L.sort(key=operator.itemgetter(*keys), reverse=args.descending)
+    writer = csv.writer(output_stream, delimiter=args.separator, lineterminator='\n')
+    writer.writerow(headline.keys())
+    for line in L:
+        writer.writerow(line)
+
 
 
 def parse_args():
     parser = ArgumentParser(description=DESCRIPTION, epilog=EXAMPLES)
     parser.add_argument('-s', '--separator', type=str, help='Separator to be used', default=',')
-    # parser.add_argument('-o', '--output_file', type=str, help='Output file. stdout is used by default')
-    # parser.add_argument('-w', action='store_true')
+
     parser.add_argument('-k', '--keys', type=str, help='Specify the list of keys (comma separated) to sort on. Field names or field numbers can be used. Dash can be used to specify fields ranges. Range \'F1-F2\' stands for all fields between F1 and F2. Range \'-F2\' stands for all fields up to F2. Range \'F1-\' stands for all fields from F1 til the end.', default='')
     parser.add_argument('-m', '--max-rows', type=int, help='Don\'t load to memory more than MAX_ROWS rows at a time. This option is crucial if you have to deal with huge csv files. Default value is 0 that meanse that this will sort file in memory.')
 
