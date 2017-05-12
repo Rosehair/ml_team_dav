@@ -32,7 +32,7 @@ def find_features(string_f, labels, unique=False, complement=False):
     return indexes
 
 
-def filter_by_column(row, indexes):
+def filter_by_column(row, indexes, args=None):
     """
     :param row: original rows of file
     :param indexes: indexes to only show in the end
@@ -40,7 +40,7 @@ def filter_by_column(row, indexes):
     """
     new_row = []
     if len(row) - 1 < max(indexes):
-        report_wrong_number_of_columns(row)
+        report_wrong_number_of_columns(row, args.careful, args.quiet)
     else:
         for index in indexes:
             new_row.append(row[index])

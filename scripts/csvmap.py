@@ -40,7 +40,7 @@ def print_row(row, output_stream):
     output_stream.write(output_line)
 
 
-def map_line(row, labels, expression, EXEC):
+def map_line(row, labels, expression, EXEC, args):
     """
     chnage each row of the file
     :param row: row to change 
@@ -53,12 +53,12 @@ def map_line(row, labels, expression, EXEC):
     try:
         exec(EXEC)
     except:
-        report_wrong_exec(EXEC)
+        report_wrong_exec(EXEC, args.careful, args.quiet)
         return False, False
     try:
         exec(expression)
     except:
-        report_wrong_expression(expression)
+        report_wrong_expression(expression, args.careful, args.quiet)
         return False, False
 
     new_row = []
@@ -85,10 +85,11 @@ def main():
         key_printed = False
         for row in input_stream:
             row = row.strip().split(args.separator)
+
             if len(row) != len(first_row):
-                report_wrong_number_of_columns(row)
-                break
-            new_row, keys = map_line(row, first_row, expression, args.EXEC)
+                report_wrong_number_of_columns(row, args.careful, args.quiet)
+                continue
+            new_row, keys = map_line(row, first_row, expression, args.EXEC, args)
             if new_row is False:
                 break
             if not key_printed:
@@ -120,6 +121,8 @@ def parse_args():
     parser.add_argument('-e', '--EXEC', type=str, help='Execute python code before starting the transformation. '
                                                        'Might be useful for import statements or even for python '
                                                        'functions definition', default='')
+    parser.add_argument('-q', '--quiet', help="Don't print information regarding errors", action='store_true')
+    parser.add_argument('--careful', help='Stop if input contains an incorrect row', action='store_true')
     parser.add_argument('expression', type=str, default='',
                         help="Python expression to be used to transform a row. Specific "
                              "columns can be referred as a fields of of dictionary named r")
