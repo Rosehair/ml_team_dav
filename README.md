@@ -4,7 +4,7 @@ CLI tools useful to work with csv files. Below is the documentation for each too
 
 ### csvpp
 
-usage: `csvpp [-h] [-q] [--careful] [-s SEPARATOR] [-n LINES_NUMBER] [-f] [-o OUTPUT_FILE] [file]`
+usage: `csvpp [-h] [-s SEPARATOR] [-n LINES_NUMBER] [-f] [-o OUTPUT_FILE] [file]`
 
 Print csv file in human-readable format.
 Input is taken from STDIN by default.
@@ -18,16 +18,13 @@ optional arguments:
   `-h, --help`
   > show help message and exit
 
-  `-q, --quiet`
-  > Don't print information regarding errors
-
-  `--careful`
-  > Stop if input contains an incorrect row
-
   `-s SEPARATOR, --separator SEPARATOR`
   > Separator to be used
 
   `-n LINES_NUMBER, --lines_number LINES_NUMBER`
+  >  Number of lines to show
+
+  `-c COLUMN, --column COLUMN`
   >  Number of lines used to set column width
 
   `-f, --format_floats`
@@ -42,7 +39,7 @@ examples:
 
 ### csvcut
 
-usage: `csvcut [-h] [-q] [--careful] [-s SEPARATOR] [-o OUTPUT_FILE] [-f FIELDS] [-c] [-u] [file]`
+usage: `csvcut [-h] [-s SEPARATOR] [-o OUTPUT_FILE] [-f FIELDS] [-c] [-u] [file]`
 
   Select some columns from csv streem.
   Could change order of fields.
@@ -54,12 +51,6 @@ positional arguments:
 optional arguments:
   `-h, --help`
   > show help message and exit
-
-  `-q, --quiet`
-  > Don't print information regarding errors
-
-  `--careful`
-  > Stop if input contains an incorrect row
 
   `-s SEPARATOR, --separator SEPARATOR`
   > Separator to be used
@@ -93,7 +84,7 @@ examples:
 
 ### csvhead
 
-usage: `csvhead [-h] [-q] [--careful] [-o OUTPUT_FILE] [-n ROWS_COUNT] [file]`
+usage: `csvhead [-h] [-o OUTPUT_FILE] [-n ROWS_COUNT] [file]`
 
 Print header and first lines of input.
 
@@ -104,12 +95,6 @@ positional arguments:
 optional arguments:
   `-h, --help`
   > show help message and exit
-
-  `-q, --quiet`
-  > Don't print information regarding errors
-
-  `--careful`
-  > Stop if input contains an incorrect row
 
   `-n ROWS_COUNT, --number_of_lines ROWS_COUNT`
   > Number of first rows to print
@@ -123,7 +108,7 @@ examples:
 
 ### csvtail
 
-usage: `csvtail [-h] [-q] [--careful] [-o OUTPUT_FILE] [-n ROWS_COUNT] [file]`
+usage: `csvtail [-h] [-o OUTPUT_FILE] [-n ROWS_COUNT] [file]`
 
 Print header and last lines of input.
 
@@ -134,12 +119,6 @@ positional arguments:
 optional arguments:
   `-h, --help`
   > show help message and exit
-
-  `-q, --quiet`
-  > Don't print information regarding errors
-
-  `--careful`
-  > Stop if input contains an incorrect row
 
   `-n ROWS_COUNT, --number_of_lines ROWS_COUNT`
   > Number of last rows to print if positive `ROWS_COUNT`. Else skips `ROWS_COUNT` lines and prints till the end of
@@ -154,7 +133,7 @@ examples:
 
 ### csvmap
 
-usage: `csvmap [-h] [-q] [--careful] [-s SEPARATOR] [-o OUTPUT_FILE] [-e EXEC] expression [file]`
+usage: `csvmap [-h] [-s SEPARATOR] [-o OUTPUT_FILE] [-e EXEC] [expression] [file]`
 
 Transform each row of a csv file with an expression provided.
 
@@ -168,12 +147,6 @@ positional arguments:
 optional arguments:
   `-h, --help`
   > show help message and exit
-
-  `-q, --quiet`
-  > Don't print information regarding errors
-
-  `--careful`
-  > Stop if input contains an incorrect row
 
   `-s SEPARATOR, --separator SEPARATOR`
   > Separator to be used
@@ -195,10 +168,10 @@ function from numpy.
 
 ### csvreduce
 
-usage: `csvreduce [-h] [-q] [--careful] [-s SEPARATOR] [-o OUTPUT_FILE] [-k KEYS] [-a AGGREGATORS] [file]`
+usage: `csvreduce [-h] [-s SEPARATOR] [-o OUTPUT_FILE] [-k KEYS] [-i INTEGRATION_STEP] [-a AGGREGATORS] [--no-sort] [file]`
 
 Reduces csv file using the KEYS provided. Reducing is a process of aggregating rows with the same keys by applying
-AGGREGATORS to them. In other words, the rows will be grouped by the KEYS during the aggregation process.
+AGGREGATORS to them. In other words, the rows will be grouped by the KEYS duting the aggregation process.
 
 positional arguments:
   `file`
@@ -207,12 +180,6 @@ positional arguments:
 optional arguments:
   `-h, --help`
   > show help message and exit
-
-  `-q, --quiet`
-  > Don't print information regarding errors
-
-  `--careful`
-  > Stop if input contains an incorrect row
 
   `-s SEPARATOR, --separator SEPARATOR`
   > Separator to be used
@@ -223,6 +190,9 @@ optional arguments:
   `-k KEYS, --keys KEYS`
   > Comma-separated list of columns to be used as reduce keys. Column names or column numbers can be used here
 
+  `-i INTEGRATION_STEP, --integration_step INTEGRATION_STEP`
+  > Divide each aggregation group into smaller groups each containing `INTEGRATION_STEP` rows.
+
   `-a AGGREGATORS, --agregators AGGREGATORS`
   > Comma-separated list of value-aggregators. Each aggregator might be one of the following: `first`, `last`, `sum`,
 `mean`, `min`, `max`, `std` (standard deviation), count. Each aggragator (except count) is a function expecting 2
@@ -230,19 +200,21 @@ arguments: column name or number and the resulting field name. The resulting fie
 `$AGGREGATOR_NAME_$FIRST_ARGUMENT'` (e.g. for `sum('a')` it will have a default value of `sum_a`). Please see the
 examples for more details.
 
-examples:
-    `cat csvle.txt | csvreduce -r sum('price', 'overall_price'),count` assuming that `csvle.txt` has a column named
-`price`, the result will be a csvle containing just a single row with columns named `overall_price` and `count`.
+  `--no-sort`
+  > If provided, the input will not be sorted prior to reduce operation. Be careful, that might lead to an incorrect
+reduce result. If your input is already sorted by the KEYS, this option will significantly speed up the reduce.
 
-    `cat flat_prices.csv | csvreduce -k type,district -a max('price'),min('price'),mean('price'),avg('square')`
-assuming
-that `flat_prices.csv` has columns name `price` and `district`, the result will be a csvle containing the maximum,
+examples:
+    `cat table.txt | tabreduce -r sum('price', 'overall_price'),count` assuming that `table.txt` has a column named
+`price`, the result will be a table containing just a single row with columns named `overall_price` and `count`.
+
+    `cat flat_prices.csv | tabreduce -k type,district -r max('price'),min('price'),mean('price'),avg('square')` assuming
+that `flat_prices.csv` has columns name `price` and `district`, the result will be a table containing the maximum,
 minimum and average price and average square of a flat for each district and commercial type.
 
 ### csvsort
 
-usage: `csvsort [-h] [-q] [--careful] [-s SEPARATOR] [-o OUTPUT_FILE] [-k KEYS] [-m MAX_ROWS] [--descending]
-[--numeric] [file]`
+usage: `csvsort [-h] [-s SEPARATOR] [-o OUTPUT_FILE] [-k KEYS] [-m MAX_ROWS] [--descending] [--numeric] [file]`
 
   Sort the rows of csv stream ascending.
 
@@ -253,12 +225,6 @@ positional arguments:
 optional arguments:
   `-h, --help`
   > show help message and exit
-
-  `-q, --quiet`
-  > Don't print information regarding errors
-
-  `--careful`
-  > Stop if input contains an incorrect row
 
   `-s SEPARATOR, --separator SEPARATOR`
   > Separator to be used
@@ -288,8 +254,7 @@ examples:
 
 ### csvplot
 
-usage: `csvplot [-h] [-q] [--careful] [-s SEPARATOR] [-o OUTPUT_FILE] [-x KEY] [-y KEYS] [--xlabel LABEL]
-[-ylabels LABELS] [file]`
+usage: `csvplot [-h] [-s SEPARATOR] [-o OUTPUT_FILE] [-x KEY] [-y KEYS] [--xlabel LABEL] [-ylabels LABELS] [file]`
 
   Plot the data based on csv file contents.
 
@@ -300,12 +265,6 @@ positional arguments:
 optional arguments:
   `-h, --help`
   > show help message and exit
-
-  `-q, --quiet`
-  > Don't print information regarding errors
-
-  `--careful`
-  > Stop if input contains an incorrect row
 
   `-s SEPARATOR, --separator SEPARATOR`
   > Separator to be used
@@ -331,8 +290,7 @@ examples:
 
 ### csvjoin
 
-usage: `csvjoin [-h] [-q] [--careful] [-s SEPARATOR] [-o OUTPUT_FILE] [-k KEYS] [-c CONFLICT_PREFIX] [-t TYPE]
-file2 [file]`
+usage: `csvjoin [-h] [-s SEPARATOR] [-o OUTPUT_FILE] [-k KEYS] [-c CONFLICT_PREFIX] [-t TYPE] file2 [file]`
 
 Join two csv files using the keys provided.
 
@@ -346,12 +304,6 @@ positional arguments:
 optional arguments:
   `-h, --help`
   > show help message and exit
-
-  `-q, --quiet`
-  > Don't print information regarding errors
-
-  `--careful`
-  > Stop if input contains an incorrect row
 
   `-s SEPARATOR, --separator SEPARATOR`
   > Separator to be used
