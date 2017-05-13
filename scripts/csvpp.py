@@ -25,7 +25,7 @@ def format_string_float(value, do_it=False):
         return value
 
 
-def print_row(row, column_widths, output_stream, print_nice):
+def print_row(row, column_widths, output_stream, print_nice, args):
     """
     Prints a row in human-readable format taking column widths into account
     :param print_nice: bool that indicates to print float nicely
@@ -34,7 +34,7 @@ def print_row(row, column_widths, output_stream, print_nice):
     :param output_stream: a stream to pretty print the row
     """
     if len(column_widths) != len(row):
-        report_wrong_number_of_columns(row)
+        report_wrong_number_of_columns(row, args.careful, args.quiet)
     else:
         output_line = '|'
         for i, column in enumerate(row):
@@ -87,13 +87,13 @@ def main():
             num_lines -= 1
             if index is 1:
                 print_separator(column_widths, output_stream)
-            print_row(row, column_widths, output_stream, args.format_floats)
+            print_row(row, column_widths, output_stream, args.format_floats, args)
 
         for row in input_stream:
             if num_lines == 0:
                 break
             num_lines -= 1
-            print_row(row.strip().split(args.separator), column_widths, output_stream, args.format_floats)
+            print_row(row.strip().split(args.separator), column_widths, output_stream, args.format_floats, args)
 
     except FileNotFoundError:
         report_error("File {} doesn't exist".format(args.file))
@@ -118,6 +118,8 @@ def parse_args():
     parser.add_argument('-c', '--column', type=int, help='Number of lines used to set column width', default=30)
     parser.add_argument('-n', '--lines_number', type=int, help='Number of lines to show', default=100)
     parser.add_argument('-f', '--format_floats', help='formats float nicely', action='store_true')
+    parser.add_argument('-q', '--quiet', help="Don't print information regarding errors", action='store_true')
+    parser.add_argument('--careful', help='Stop if input contains an incorrect row', action='store_true')
     parser.add_argument('-o', '--output_file', type=str, help='Output file. stdout is used by default')
     parser.add_argument('file', nargs='?', help='File to read input from. stdin is used by default')
 

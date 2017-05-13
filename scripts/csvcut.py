@@ -32,11 +32,11 @@ def main():
         index_show = find_features(args.fields, first_row, unique=args.unique, complement=args.complement)
 
         if index_show is not False:
-            print_row(filter_by_column(first_row, index_show), output_stream)
+            print_row(filter_by_column(first_row, index_show, args), output_stream)
 
             for row in input_stream:
                 row = row.strip().split(args.separator)
-                row = filter_by_column(row, index_show)
+                row = filter_by_column(row, index_show, args)
                 print_row(row, output_stream)
 
     except FileNotFoundError:
@@ -62,6 +62,8 @@ def parse_args():
     parser.add_argument('-f', '--fields', type=str, help='Specify list of fields (comma separated) to cut', default='')
     parser.add_argument('-o', '--output_file', type=str, help='Output file. stdout is used by default')
     parser.add_argument('-u', '--unique', help='Remove duplicates from list of FIELDS', action='store_true')
+    parser.add_argument('-q', '--quiet', help="Don't print information regarding errors", action='store_true')
+    parser.add_argument('--careful', help='Stop if input contains an incorrect row', action='store_true')
     parser.add_argument('-c', '--complement', help='Returns indexes of elements that are not in fields',
                         action='store_true')
     parser.add_argument('file', nargs='?', help='File to read input from. stdin is used by default')
