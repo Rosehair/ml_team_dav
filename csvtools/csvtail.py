@@ -1,9 +1,7 @@
 from argparse import ArgumentParser
 import sys
-import os
-SCRIPT_DIR = os.path.dirname(os.path.realpath(os.path.join(os.getcwd(), os.path.expanduser(__file__))))
-sys.path.append(os.path.normpath(os.path.join(SCRIPT_DIR, '..')))
-from scripts.utils import InputError, report_error
+
+from .utils import InputError, report_error
 
 
 DESCRIPTION = 'csvtail - print header and last lines of input'

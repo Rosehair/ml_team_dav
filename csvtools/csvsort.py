@@ -2,10 +2,7 @@ from argparse import ArgumentParser
 import operator
 import csv
 import sys
-import os
-SCRIPT_DIR = os.path.dirname(os.path.realpath(os.path.join(os.getcwd(), os.path.expanduser(__file__))))
-sys.path.append(os.path.normpath(os.path.join(SCRIPT_DIR, '..')))
-from scripts.utils import InputError, report_wrong_fields_to_cut, Raise, report_error
+from .utils import InputError, report_wrong_fields_to_cut, Raise, report_error
 
 DESCRIPTION = 'csvtail - Sort the rows of csv stream ascending.'
 EXAMPLES = 'examples: cat stat.csv | csvsort -k shows'

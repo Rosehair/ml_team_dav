@@ -1,11 +1,8 @@
 from argparse import ArgumentParser
-import operator
 import csv
 import sys
-import os
-SCRIPT_DIR = os.path.dirname(os.path.realpath(os.path.join(os.getcwd(), os.path.expanduser(__file__))))
-sys.path.append(os.path.normpath(os.path.join(SCRIPT_DIR, '..')))
-from scripts.utils import Raise, InputError, report_error
+
+from .utils import Raise, InputError, report_error
 
 DESCRIPTION = 'csvjoin.py - Join two csv files using the keys provided.'
 EXAMPLES = 'examples: csvjoin.py stat1.txt stat2.txt -k id, -t OUTER'

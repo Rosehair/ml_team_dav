@@ -1,9 +1,5 @@
 #!/usr/bin/env python3
 
-import sys
-import os
-sys.path.append(os.path.normpath(os.path.join(os.getcwd(), '..')))
-
-from scripts.csvsort import function_csvsort, parse_args
+from csvtools.csvsort import function_csvsort, parse_args
 
 function_csvsort(parse_args())

@@ -1,9 +1,6 @@
 #!/usr/bin/env python3
 
-import sys
-import os
-sys.path.append(os.path.normpath(os.path.join(os.getcwd(), '..')))
 
-from scripts.csvjoin import function_csvjoin, parse_args
+from csvtools.csvjoin import function_csvjoin, parse_args
 
 function_csvjoin(parse_args())
