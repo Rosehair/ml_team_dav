@@ -1,4 +1,6 @@
 from argparse import ArgumentParser
+from utils import *
+
 import sys
 
 
@@ -33,34 +35,42 @@ def tail(f, lines):
 
 
 def main():
-    args = parse_args()
-    input_stream = open(args.file, 'r') if args.file else sys.stdin
-    output_stream = open(args.output_file, 'w') if args.output_file else sys.stdout
+    try:
+        args = parse_args()
+        input_stream = open(args.file, 'r') if args.file else sys.stdin
+        output_stream = open(args.output_file, 'w') if args.output_file else sys.stdout
 
-    heading = input_stream.readline()
-    output_stream.write(heading)
+        heading = input_stream.readline()
+        output_stream.write(heading)
 
-    if args.number_of_lines > 0:
-        if input_stream == sys.stdin:
-            queue = []
-            for line in input_stream:
-                queue = queue[-args.number_of_lines+1:]
-                queue.append(line)
-            output_stream.write(''.join(queue))
+        if args.number_of_lines > 0:
+            if input_stream == sys.stdin:
+                queue = []
+                for line in input_stream:
+                    queue = queue[-args.number_of_lines+1:]
+                    queue.append(line)
+                output_stream.write(''.join(queue))
+            else:
+                # use tail function
+                output_stream.write(tail(input_stream, args.number_of_lines))
         else:
-            # use tail function
-            output_stream.write(tail(input_stream, args.number_of_lines))
-    else:
-        line = 'line'
-        for _ in range(-args.number_of_lines):
-            line = input_stream.readline()
-            if line == '':
-                break
-        # write rest lines
-        while line != '':
-            line = input_stream.readline()
-            output_stream.write(line)
-
+            line = 'line'
+            for _ in range(-args.number_of_lines):
+                line = input_stream.readline()
+                if line == '':
+                    break
+            # write rest lines
+            while line != '':
+                line = input_stream.readline()
+                output_stream.write(line)
+    except FileNotFoundError:
+        report_error("File {} doesn't exist".format(args.file))
+    finally:
+        try:
+            input_stream.close()
+            output_stream.close()
+        except:
+            pass
 
 def parse_args():
     parser = ArgumentParser(description=DESCRIPTION, epilog=EXAMPLES)

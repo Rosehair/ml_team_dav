@@ -60,6 +60,9 @@ class InputError(Exception):
         self.message = message
 
 
+    def __repr__(self):
+        return self.expression + ' ' + self.message
+
 def report_error(error, quiet=False):
     """
     Formats the error message and prints it to stderr
@@ -120,3 +123,4 @@ def report_wrong_exec(expression, careful=False, quiet=False):
     if careful:
         raise InputError(expression, error)
     report_error(error + expression, quiet)
+
