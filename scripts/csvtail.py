@@ -1,7 +1,9 @@
 from argparse import ArgumentParser
-from utils import *
-
 import sys
+import os
+SCRIPT_DIR = os.path.dirname(os.path.realpath(os.path.join(os.getcwd(), os.path.expanduser(__file__))))
+sys.path.append(os.path.normpath(os.path.join(SCRIPT_DIR, '..')))
+from scripts.utils import InputError, report_error
 
 
 DESCRIPTION = 'csvtail - print header and last lines of input'
@@ -34,9 +36,8 @@ def tail(f, lines):
     return ''.join((''.join(reversed(s))).splitlines(True)[-lines:])
 
 
-def main():
+def function_csvtail(args):
     try:
-        args = parse_args()
         input_stream = open(args.file, 'r') if args.file else sys.stdin
         output_stream = open(args.output_file, 'w') if args.output_file else sys.stdout
 
@@ -65,6 +66,13 @@ def main():
                 output_stream.write(line)
     except FileNotFoundError:
         report_error("File {} doesn't exist".format(args.file))
+    except KeyboardInterrupt:
+        pass
+    except BrokenPipeError:
+        # The following line prevents python to inform you about the broken pipe
+        sys.stderr.close()
+    except Exception as e:
+        report_error('Caught unknown exception. Please report to developers: {}'.format(e))
     finally:
         try:
             input_stream.close()
@@ -84,4 +92,4 @@ def parse_args():
     return args
 
 if __name__ == '__main__':
-    main()
+    function_csvtail(parse_args())

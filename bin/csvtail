@@ -1,0 +1,9 @@
+#!/usr/bin/env python3
+
+import sys
+import os
+sys.path.append(os.path.normpath(os.path.join(os.getcwd(), '..')))
+
+from scripts.csvtail import function_csvtail, parse_args
+
+function_csvtail(parse_args())

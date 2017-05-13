@@ -1,6 +1,7 @@
 import sys
 
 
+
 def find_features(string_f, labels, unique=False, complement=False):
     """
     :param complement: return indexes of elements that are not in fields
@@ -71,6 +72,12 @@ def report_error(error, quiet=False):
     """
     if not quiet:
         sys.stderr.write('ERROR: ' + error + '\n')
+
+
+def Raise(err, careful=False, quiet=False):
+    if careful:
+        raise err
+    report_error(err.expression + '. ' + err.message, quiet)
 
 
 def report_wrong_number_of_columns(row, careful=False, quiet=False):
