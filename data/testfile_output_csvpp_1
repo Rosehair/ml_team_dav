@@ -1,0 +1,18 @@
+| id | price  | condition      | district         | area |
+----------------------------------------------------------
+| 0  | 65000  | good           | Center           | 80   |
+| 1  | 140000 | newly repaired | Arabkir          | 115  |
+| 2  | 97000  | newly repaired | Center           | 72   |
+| 11 | 34500  | good           | Avan             | 94   |
+| 12 | 34500  | good           | Avan             | 94   |
+| 13 | 38700  | newly repaired | Malatia-Sebastia | 66   |
+| 14 | 150000 | newly repaired | Qanaqer-Zeytun   | 120  |
+| 15 | 161000 | zero condition | Center           | 115  |
+| 16 | 49000  | good           | Arabkir          | 67   |
+| 17 | 110000 | newly repaired | Arabkir          | 85   |
+| 18 | 42000  | newly repaired | Arabkir          | 45   |
+| 19 | 60000  | newly repaired | Center           | 98   |
+| 20 | 115000 | newly repaired | Arabkir          | 69   |
+| 28 | 150000 | newly repaired | Center           | 62   |
+| 29 | 36000  | newly repaired | Achapnyak        | 58   |
+| 30 | 75000  | newly repaired | Davtashen        | 40   |
