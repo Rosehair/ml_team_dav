@@ -1,0 +1,17 @@
+condition,id,price
+good,0,65000
+newly repaired,1,140000
+newly repaired,2,97000
+good,11,34500
+good,12,34500
+newly repaired,13,38700
+newly repaired,14,150000
+zero condition,15,161000
+good,16,49000
+newly repaired,17,110000
+newly repaired,18,42000
+newly repaired,19,60000
+newly repaired,20,115000
+newly repaired,28,150000
+newly repaired,29,36000
+newly repaired,30,75000

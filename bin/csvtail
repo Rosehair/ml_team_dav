@@ -1,0 +1,5 @@
+#!/usr/bin/env python3
+
+from csvtools.csvtail import function_csvtail, parse_args
+
+function_csvtail(parse_args())

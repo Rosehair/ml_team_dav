@@ -1,0 +1,5 @@
+#!/usr/bin/env python3
+
+from csvtools.csvsort import function_csvsort, parse_args
+
+function_csvsort(parse_args())
