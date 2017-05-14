@@ -1,0 +1,8 @@
+Epoch 801 took 29.396s (last saved epoch 800) 
+  training loss:		0.104997 
+  train accuracy:	98.82 % 
+  validation accuracy:	98.43 % 
+Epoch 802 took 29.543s (last saved epoch 800) 
+  training loss:		0.104407 
+  train accuracy:	98.87 % 
+  validation accuracy:	98.63 % 

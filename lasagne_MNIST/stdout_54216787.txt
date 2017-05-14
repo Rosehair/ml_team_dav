@@ -1,0 +1,242 @@
+Epoch 418 took 219.076s (last saved epoch 417) 
+  training loss:		0.050209 
+  train accuracy:	99.89 % 
+  validation accuracy:	99.10 % 
+Epoch 419 took 217.670s (last saved epoch 417) 
+  training loss:		0.045349 
+  train accuracy:	99.84 % 
+  validation accuracy:	99.12 % 
+Epoch 420 took 218.459s (last saved epoch 417) 
+  training loss:		0.054953 
+  train accuracy:	99.83 % 
+  validation accuracy:	99.13 % 
+Saved!!!
+Epoch 421 took 220.201s (last saved epoch 417) 
+  training loss:		0.048445 
+  train accuracy:	99.87 % 
+  validation accuracy:	99.07 % 
+Epoch 422 took 218.983s (last saved epoch 417) 
+  training loss:		0.052598 
+  train accuracy:	99.87 % 
+  validation accuracy:	99.18 % 
+Epoch 423 took 217.865s (last saved epoch 417) 
+  training loss:		0.048619 
+  train accuracy:	99.90 % 
+  validation accuracy:	99.17 % 
+Saved!!!
+Epoch 424 took 218.123s (last saved epoch 417) 
+  training loss:		0.059230 
+  train accuracy:	99.86 % 
+  validation accuracy:	99.05 % 
+Epoch 425 took 219.058s (last saved epoch 417) 
+  training loss:		0.063548 
+  train accuracy:	99.80 % 
+  validation accuracy:	99.15 % 
+Epoch 426 took 219.659s (last saved epoch 417) 
+  training loss:		0.054800 
+  train accuracy:	99.84 % 
+  validation accuracy:	99.24 % 
+Saved!!!
+Epoch 427 took 219.947s (last saved epoch 417) 
+  training loss:		0.059194 
+  train accuracy:	99.80 % 
+  validation accuracy:	99.07 % 
+Epoch 428 took 219.611s (last saved epoch 417) 
+  training loss:		0.059339 
+  train accuracy:	99.82 % 
+  validation accuracy:	99.18 % 
+Epoch 429 took 220.121s (last saved epoch 417) 
+  training loss:		0.055630 
+  train accuracy:	99.86 % 
+  validation accuracy:	99.04 % 
+Saved!!!
+Epoch 430 took 219.990s (last saved epoch 417) 
+  training loss:		0.049527 
+  train accuracy:	99.86 % 
+  validation accuracy:	99.15 % 
+Epoch 431 took 219.627s (last saved epoch 417) 
+  training loss:		0.057821 
+  train accuracy:	99.85 % 
+  validation accuracy:	99.03 % 
+Epoch 432 took 217.634s (last saved epoch 417) 
+  training loss:		0.051433 
+  train accuracy:	99.85 % 
+  validation accuracy:	99.16 % 
+Saved!!!
+Epoch 433 took 217.526s (last saved epoch 417) 
+  training loss:		0.046379 
+  train accuracy:	99.87 % 
+  validation accuracy:	99.23 % 
+Epoch 434 took 217.058s (last saved epoch 417) 
+  training loss:		0.053297 
+  train accuracy:	99.83 % 
+  validation accuracy:	99.37 % 
+Epoch 435 took 218.540s (last saved epoch 417) 
+  training loss:		0.054144 
+  train accuracy:	99.86 % 
+  validation accuracy:	99.21 % 
+Saved!!!
+Epoch 436 took 218.490s (last saved epoch 417) 
+  training loss:		0.057402 
+  train accuracy:	99.83 % 
+  validation accuracy:	99.40 % 
+Epoch 437 took 219.634s (last saved epoch 417) 
+  training loss:		0.066431 
+  train accuracy:	99.83 % 
+  validation accuracy:	98.99 % 
+Epoch 438 took 220.628s (last saved epoch 417) 
+  training loss:		0.059942 
+  train accuracy:	99.83 % 
+  validation accuracy:	99.31 % 
+Saved!!!
+Epoch 439 took 219.290s (last saved epoch 417) 
+  training loss:		0.065817 
+  train accuracy:	99.80 % 
+  validation accuracy:	99.06 % 
+Epoch 440 took 218.644s (last saved epoch 417) 
+  training loss:		0.062321 
+  train accuracy:	99.79 % 
+  validation accuracy:	98.86 % 
+Epoch 441 took 219.104s (last saved epoch 417) 
+  training loss:		0.058875 
+  train accuracy:	99.79 % 
+  validation accuracy:	99.02 % 
+Saved!!!
+Epoch 442 took 218.152s (last saved epoch 417) 
+  training loss:		0.061403 
+  train accuracy:	99.78 % 
+  validation accuracy:	98.93 % 
+Epoch 443 took 217.714s (last saved epoch 417) 
+  training loss:		0.054785 
+  train accuracy:	99.81 % 
+  validation accuracy:	99.07 % 
+Epoch 444 took 217.206s (last saved epoch 417) 
+  training loss:		0.056515 
+  train accuracy:	99.83 % 
+  validation accuracy:	99.06 % 
+Saved!!!
+Epoch 445 took 217.290s (last saved epoch 417) 
+  training loss:		0.064465 
+  train accuracy:	99.82 % 
+  validation accuracy:	99.14 % 
+Epoch 446 took 218.684s (last saved epoch 417) 
+  training loss:		0.066615 
+  train accuracy:	99.81 % 
+  validation accuracy:	98.93 % 
+Epoch 447 took 218.486s (last saved epoch 417) 
+  training loss:		0.059309 
+  train accuracy:	99.84 % 
+  validation accuracy:	99.10 % 
+Saved!!!
+Epoch 448 took 218.578s (last saved epoch 417) 
+  training loss:		0.058959 
+  train accuracy:	99.84 % 
+  validation accuracy:	98.99 % 
+Epoch 449 took 218.672s (last saved epoch 417) 
+  training loss:		0.054029 
+  train accuracy:	99.80 % 
+  validation accuracy:	99.18 % 
+Epoch 450 took 219.273s (last saved epoch 417) 
+  training loss:		0.058443 
+  train accuracy:	99.81 % 
+  validation accuracy:	99.04 % 
+Saved!!!
+Epoch 451 took 219.384s (last saved epoch 417) 
+  training loss:		0.054517 
+  train accuracy:	99.82 % 
+  validation accuracy:	99.05 % 
+Epoch 452 took 218.862s (last saved epoch 417) 
+  training loss:		0.060252 
+  train accuracy:	99.79 % 
+  validation accuracy:	99.23 % 
+Epoch 453 took 218.095s (last saved epoch 417) 
+  training loss:		0.069239 
+  train accuracy:	99.81 % 
+  validation accuracy:	98.85 % 
+Saved!!!
+Epoch 454 took 218.160s (last saved epoch 417) 
+  training loss:		0.062316 
+  train accuracy:	99.78 % 
+  validation accuracy:	99.14 % 
+Epoch 455 took 219.254s (last saved epoch 417) 
+  training loss:		0.057541 
+  train accuracy:	99.80 % 
+  validation accuracy:	98.99 % 
+Epoch 456 took 219.442s (last saved epoch 417) 
+  training loss:		0.060077 
+  train accuracy:	99.85 % 
+  validation accuracy:	99.17 % 
+Saved!!!
+Epoch 457 took 220.149s (last saved epoch 417) 
+  training loss:		0.060044 
+  train accuracy:	99.82 % 
+  validation accuracy:	99.15 % 
+Epoch 458 took 220.228s (last saved epoch 417) 
+  training loss:		0.055422 
+  train accuracy:	99.85 % 
+  validation accuracy:	99.18 % 
+Epoch 459 took 219.900s (last saved epoch 417) 
+  training loss:		0.061022 
+  train accuracy:	99.85 % 
+  validation accuracy:	99.02 % 
+Saved!!!
+Epoch 460 took 220.066s (last saved epoch 417) 
+  training loss:		0.055590 
+  train accuracy:	99.81 % 
+  validation accuracy:	99.17 % 
+Epoch 461 took 219.552s (last saved epoch 417) 
+  training loss:		0.065463 
+  train accuracy:	99.80 % 
+  validation accuracy:	99.06 % 
+Epoch 462 took 219.570s (last saved epoch 417) 
+  training loss:		0.063713 
+  train accuracy:	99.76 % 
+  validation accuracy:	98.82 % 
+Saved!!!
+Epoch 463 took 219.792s (last saved epoch 417) 
+  training loss:		0.061184 
+  train accuracy:	99.79 % 
+  validation accuracy:	98.91 % 
+Epoch 464 took 217.907s (last saved epoch 417) 
+  training loss:		0.057887 
+  train accuracy:	99.81 % 
+  validation accuracy:	99.09 % 
+Epoch 465 took 218.269s (last saved epoch 417) 
+  training loss:		0.059461 
+  train accuracy:	99.79 % 
+  validation accuracy:	99.07 % 
+Saved!!!
+Epoch 466 took 217.748s (last saved epoch 417) 
+  training loss:		0.066521 
+  train accuracy:	99.82 % 
+  validation accuracy:	99.20 % 
+Epoch 467 took 218.119s (last saved epoch 417) 
+  training loss:		0.062380 
+  train accuracy:	99.74 % 
+  validation accuracy:	99.14 % 
+Epoch 468 took 218.500s (last saved epoch 417) 
+  training loss:		0.064649 
+  train accuracy:	99.79 % 
+  validation accuracy:	98.81 % 
+Saved!!!
+Epoch 469 took 218.990s (last saved epoch 417) 
+  training loss:		0.055338 
+  train accuracy:	99.83 % 
+  validation accuracy:	99.12 % 
+Epoch 470 took 217.886s (last saved epoch 417) 
+  training loss:		0.057622 
+  train accuracy:	99.80 % 
+  validation accuracy:	98.93 % 
+Epoch 471 took 217.643s (last saved epoch 417) 
+  training loss:		0.058329 
+  train accuracy:	99.83 % 
+  validation accuracy:	99.08 % 
+Saved!!!
+Epoch 472 took 217.819s (last saved epoch 417) 
+  training loss:		0.063828 
+  train accuracy:	99.78 % 
+  validation accuracy:	99.00 % 
+Epoch 473 took 218.981s (last saved epoch 417) 
+  training loss:		0.058139 
+  train accuracy:	99.79 % 
+  validation accuracy:	99.12 % 
