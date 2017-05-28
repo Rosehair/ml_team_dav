@@ -1,5 +1,14 @@
-# ml_team_dav
-team consisting from 
-David Khechoyan
-Ashot Matevosyan
-Vardges Mambreyan
+### preprocess
+```bash
+$ ./preprocess.sh <input file> <output file>
+```
+
+### train
+```bash
+$ ./train.sh <training file> <model file name>
+```
+
+### test
+```bash
+$ ./test.sh <model file name> <test file>
+```
