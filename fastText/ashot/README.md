@@ -12,3 +12,7 @@ $ ./train.sh <training file> <model file name>
 ```bash
 $ ./test.sh <model file name> <test file>
 ```
+### sentiment
+```bash
+$ ./sentiment.sh <training file>  <test file>
+```
