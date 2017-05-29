@@ -1,4 +1,4 @@
-if [ -z $2 ]
+if [ -z $1 ]
 then
 	exit
 fi
@@ -15,4 +15,4 @@ sed "s/'//g" |
 sed "s/\bis \|\bare \|\bam \|\ba \|\ban \|\bthe / /g" |
 sed "s/\b[^i] / /g" |
 sed "s/\( [0-9]\+\)/ /g" |
-sed "s/  */ /g" > $2
+sed "s/  */ /g" 
