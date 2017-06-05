@@ -1,5 +1,3 @@
-# ml_team_dav
-team consisting from 
-David Khechoyan
-Ashot Matevosyan
+homeworks
 Vardges Mambreyan
+see each taks in it's folder
