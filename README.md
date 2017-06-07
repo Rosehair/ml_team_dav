@@ -1,5 +1,2 @@
-# ml_team_dav
-team consisting from 
-David Khechoyan
+# TSA homeworks
 Ashot Matevosyan
-Vardges Mambreyan
